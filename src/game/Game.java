@@ -32,6 +32,7 @@ public class Game extends GameContainer implements Logical, Graphical {
 	}
 	
 	private Collection<Dough> doughs;
+	private Collection<Bread> breads;
 	private Player player;
 	private int breadDelivered;
 	
@@ -47,6 +48,8 @@ public class Game extends GameContainer implements Logical, Graphical {
 		addControls(controls, new ArrayList<>());
 		
 		doughs = new ArrayList<>();
+		breads = new ArrayList<>();
+		breads.add(new Bread(new Point2D(40, 40), 1.0));
 	}
 	
 	
@@ -78,10 +81,24 @@ public class Game extends GameContainer implements Logical, Graphical {
 			@Override
 			public void pressed() {
 				if(player.handsFull()) {
-					Dough droppedDough = player.dropHeld();
-					doughs.add(droppedDough);
+					Holdable droppedDough = player.dropHeld();
+					if(droppedDough.getClass() == Dough.class) {
+						doughs.add((Dough) droppedDough);
+					}
+					else {
+						breads.add((Bread) droppedDough);
+					}
 				}
 				else {
+					
+					for (Iterator<Bread> breadIt = breads.iterator(); breadIt.hasNext();) {
+						Bread bread = breadIt.next();
+						
+						if(bread.getCollisionBox().contains(player.center()) || bread.getCollisionBox().contains(new Point2D(player.center().x, 10))) { //Grab a single piece of dough
+							player.take(bread);
+							return;
+						}
+					}
 					for (Iterator<Dough> doughIt = doughs.iterator(); doughIt.hasNext();) {
 						Dough dough = doughIt.next();
 						
@@ -128,7 +145,11 @@ public class Game extends GameContainer implements Logical, Graphical {
 		for (Iterator<Dough> iterator = doughs.iterator(); iterator.hasNext();) {
 			Dough dough = iterator.next();
 			dough.render(gc);
-			//dough.renderFloor(gc);
+		}
+		
+		for (Iterator<Bread> iterator = breads.iterator(); iterator.hasNext();) {
+			Bread bread = iterator.next();
+			bread.render(gc);
 		}
 		
 		player.render(gc);
@@ -202,6 +223,12 @@ public class Game extends GameContainer implements Logical, Graphical {
 		doughs.removeAll(mergingSet);
 		doughs.add(new Dough(mergingSet));
 		
+	}
+	
+	for (Iterator<Bread> iterator = breads.iterator(); iterator.hasNext();) {
+		Bread bread = iterator.next();
+		bread.accelerate(Gravity.fall(delta*10, bread));
+		bread.move(delta);
 	}
 	
 	player.update(delta);

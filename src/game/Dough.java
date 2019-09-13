@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import com.zalinius.architecture.Collidable;
+import com.zalinius.architecture.GameObject;
 import com.zalinius.geometry.Circle;
 import com.zalinius.geometry.Shape;
 import com.zalinius.physics.Moveable;
@@ -16,7 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.ArcType;
 
-public class Dough implements Moveable, Collidable{
+public class Dough implements Collidable, Holdable, GameObject{
 	
 	public static final double DENSITY = 1.0 / 640;  //density is in mass/px^2
 
@@ -155,6 +156,12 @@ public class Dough implements Moveable, Collidable{
 		double semiCircleDiameter = getHalfCircleDiameter();
 		gc.setFill(color);
 		gc.fillArc(center.x - semiCircleDiameter/2, center.y - semiCircleDiameter / 2, semiCircleDiameter, semiCircleDiameter, 180, 180, ArcType.OPEN);		
+	}
+
+	@Override
+	public void update(double delta) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

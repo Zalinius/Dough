@@ -16,7 +16,7 @@ public class Player implements GameObject{
 	private double x;
 	private double s;
 
-	private Dough heldDough;
+	private Holdable heldDough;
 
 	public Player() {
 		x = 100;
@@ -34,7 +34,7 @@ public class Player implements GameObject{
 		gc.fillRect(x - 10, 0, 20, 40);
 
 		if(heldDough != null) {
-			heldDough.renderSphere(gc);
+			heldDough.render(gc);
 		}
 	}
 
@@ -81,18 +81,18 @@ public class Player implements GameObject{
 		return heldDough != null;
 	}
 
-	public Dough dropHeld() {
+	public Holdable dropHeld() {
 		if(handsFull()) {
-			Dough dough = heldDough;
+			Holdable held = heldDough;
 			heldDough = null;
-			return dough;
+			return held;
 		}
 		else {
 			return null;
 		}
 	}
 	
-	public void take(Dough dough) {
+	public void take(Holdable dough) {
 		heldDough = dough;
 	}
 	
