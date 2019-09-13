@@ -164,4 +164,14 @@ public class Dough implements Collidable, Holdable, GameObject{
 		
 	}
 
+	@Override
+	public Holdable cook() {
+		return new Bread(center, mass);
+	}
+
+	@Override
+	public boolean selfInsert(InputSlot<Dough> doughSlot, InputSlot<Bread> breadSlot) {
+		return doughSlot.insert(this);
+	}
+
 }

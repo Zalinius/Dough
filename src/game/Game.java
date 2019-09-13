@@ -33,6 +33,7 @@ public class Game extends GameContainer implements Logical, Graphical {
 	
 	private Collection<Dough> doughs;
 	private Collection<Bread> breads;
+	private Oven oven;
 	private Player player;
 	private int breadDelivered;
 	
@@ -46,10 +47,21 @@ public class Game extends GameContainer implements Logical, Graphical {
 		controls.addAll(interactions());
 		//controls.addAll(player.keyboardControls());
 		addControls(controls, new ArrayList<>());
-		
+				
 		doughs = new ArrayList<>();
 		breads = new ArrayList<>();
 		breads.add(new Bread(new Point2D(40, 40), 1.0));
+		
+		InputSlot<Bread> breadSlot = new InputSlot<Bread>() {
+			
+			@Override
+			public boolean insert(Bread item) {
+				breads.add(item);
+				return true;
+			}
+		};
+		oven = new Oven(150, breadSlot);
+
 	}
 	
 	
@@ -81,12 +93,17 @@ public class Game extends GameContainer implements Logical, Graphical {
 			@Override
 			public void pressed() {
 				if(player.handsFull()) {
-					Holdable droppedDough = player.dropHeld();
-					if(droppedDough.getClass() == Dough.class) {
-						doughs.add((Dough) droppedDough);
+					if(oven.getCollisionBox().contains(player.center())){
+						oven.insert(player.dropHeld());
 					}
-					else {
-						breads.add((Bread) droppedDough);
+					else{
+						Holdable droppedDough = player.dropHeld();
+						if(droppedDough.getClass() == Dough.class) {
+							doughs.add((Dough) droppedDough);
+						}
+						else {
+							breads.add((Bread) droppedDough);
+						}
 					}
 				}
 				else {
@@ -146,11 +163,14 @@ public class Game extends GameContainer implements Logical, Graphical {
 			Dough dough = iterator.next();
 			dough.render(gc);
 		}
+		oven.render(gc);
+
 		
 		for (Iterator<Bread> iterator = breads.iterator(); iterator.hasNext();) {
 			Bread bread = iterator.next();
 			bread.render(gc);
 		}
+		
 		
 		player.render(gc);
 
@@ -230,6 +250,8 @@ public class Game extends GameContainer implements Logical, Graphical {
 		bread.accelerate(Gravity.fall(delta*10, bread));
 		bread.move(delta);
 	}
+	
+	oven.update(delta);
 	
 	player.update(delta);
 		

@@ -93,6 +93,16 @@ public class Bread implements Moveable, Collidable, Holdable, GameObject{
 	public void update(double delta) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Holdable cook() {
+		return null;
+	}
+
+	@Override
+	public boolean selfInsert(InputSlot<Dough> doughSlot, InputSlot<Bread> breadSlot) {
+		return breadSlot.insert(this);
 	}	
 	
 

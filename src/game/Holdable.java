@@ -7,4 +7,7 @@ import com.zalinius.physics.Point2D;
 public interface Holdable extends GameObject, Moveable {
 
 	public void moveTo(Point2D position);
+
+	public Holdable cook();
+	public boolean selfInsert(InputSlot<Dough> doughSlot, InputSlot<Bread> breadSlot);
 }
