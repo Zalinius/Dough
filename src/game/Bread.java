@@ -1,5 +1,7 @@
 package game;
 
+import java.util.Collection;
+
 import com.zalinius.architecture.Collidable;
 import com.zalinius.architecture.GameObject;
 import com.zalinius.geometry.Circle;
@@ -72,7 +74,7 @@ public class Bread implements Moveable, Collidable, Holdable, GameObject{
 
 	@Override
 	public Shape getCollisionBox() {
-		return new Rectangle(position(), getLength(), getHeight());
+		return new Rectangle(new Point2D(center.x-getLength()/2, center.y-getHeight()/2), getLength(), getHeight());
 	}
 	
 	@Override
@@ -103,6 +105,11 @@ public class Bread implements Moveable, Collidable, Holdable, GameObject{
 	@Override
 	public boolean selfInsert(InputSlot<Dough> doughSlot, InputSlot<Bread> breadSlot) {
 		return breadSlot.insert(this);
+	}
+
+	@Override
+	public boolean selfRemove(Collection<Dough> doughSlot, Collection<Bread> breadSlot) {
+		return breadSlot.remove(this);
 	}	
 	
 

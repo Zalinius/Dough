@@ -107,25 +107,33 @@ public class Game extends GameContainer implements Logical, Graphical {
 					}
 				}
 				else {
+					Holdable taken = null;
 					
 					for (Iterator<Bread> breadIt = breads.iterator(); breadIt.hasNext();) {
 						Bread bread = breadIt.next();
 						
-						if(bread.getCollisionBox().contains(player.center()) || bread.getCollisionBox().contains(new Point2D(player.center().x, 10))) { //Grab a single piece of dough
+						if(taken == null && bread.getCollisionBox().contains(player.center()) || bread.getCollisionBox().contains(new Point2D(player.center().x, 10))) { //Grab a single piece of dough
 							player.take(bread);
-							return;
+							taken = bread;
 						}
 					}
 					for (Iterator<Dough> doughIt = doughs.iterator(); doughIt.hasNext();) {
 						Dough dough = doughIt.next();
 						
-						if(dough.getCollisionBox().contains(player.center()) && dough.canSplit(1.0)) { //Separate a piece of dough
+						if(taken == null && dough.getCollisionBox().contains(player.center()) && dough.canSplit(1.0)) { //Separate a piece of dough
 							Dough splitDough = dough.split(1.0);
 							player.take(splitDough);
+							taken = splitDough;
 						}
-						else if(dough.getCollisionBox().contains(player.center())) { //Grab a single piece of dough
+						else if(taken == null && dough.getCollisionBox().contains(player.center())) { //Grab a single piece of dough
 							player.take(dough);
+							taken = dough;
 						}
+					}
+					
+					if(taken != null) {
+						//Remove item from world;
+						taken.selfRemove(doughs, breads);
 					}
 				}
 			}
@@ -182,6 +190,7 @@ public class Game extends GameContainer implements Logical, Graphical {
 	
 	@Override
 	public void update(double delta) {
+
 		Set<Set<Dough>> mergers = new HashSet<>();
 
 		for (Iterator<Dough> iterator = doughs.iterator(); iterator.hasNext();) {

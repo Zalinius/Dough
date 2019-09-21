@@ -173,5 +173,9 @@ public class Dough implements Collidable, Holdable, GameObject{
 	public boolean selfInsert(InputSlot<Dough> doughSlot, InputSlot<Bread> breadSlot) {
 		return doughSlot.insert(this);
 	}
+	@Override
+	public boolean selfRemove(Collection<Dough> doughSlot, Collection<Bread> breadSlot) {
+		return doughSlot.remove(this);
+	}	
 
 }
