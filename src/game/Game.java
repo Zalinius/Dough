@@ -13,8 +13,6 @@ import com.zalinius.architecture.input.Inputtable;
 import com.zalinius.physics.Gravity;
 import com.zalinius.physics.Point2D;
 import com.zalinius.physics.collisions.Collision;
-import com.zalinius.utilities.Tuple;
-import com.zalinius.utilities.time.ActionTimer;
 import com.zalinius.utilities.time.GameClock;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -76,7 +74,7 @@ public class Game extends GameContainer implements Logical, Graphical {
 			@Override
 			public void pressed() {
 				System.out.println("Chowskies!");
-				exit();
+				exitGame();
 			}
 		};
 	}

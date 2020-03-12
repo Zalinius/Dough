@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import com.zalinius.architecture.Collidable;
 import com.zalinius.architecture.GameObject;
-import com.zalinius.geometry.Circle;
 import com.zalinius.geometry.Rectangle;
 import com.zalinius.geometry.Shape;
 import com.zalinius.physics.Moveable;

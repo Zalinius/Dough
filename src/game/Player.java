@@ -60,6 +60,16 @@ public class Player implements GameObject{
 			public void held(double delta) {
 				x -= s * delta;
 			}
+			@Override
+			public void pressed() {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void released() {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 		controls.add(new Inputtable() {
 
@@ -70,6 +80,16 @@ public class Player implements GameObject{
 			@Override
 			public void held(double delta) {
 				x += s * delta;
+			}
+			@Override
+			public void pressed() {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void released() {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 

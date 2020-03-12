@@ -7,7 +7,6 @@ import com.zalinius.architecture.Collidable;
 import com.zalinius.architecture.GameObject;
 import com.zalinius.geometry.Circle;
 import com.zalinius.geometry.Shape;
-import com.zalinius.physics.Moveable;
 import com.zalinius.physics.Point2D;
 import com.zalinius.physics.Vector2D;
 import com.zalinius.utilities.ZMath;
