@@ -53,7 +53,7 @@ public class Bread implements Moveable, Collidable, Holdable, GameObject{
 	
 	public void move(double delta) {
 		this.center = Point2D.add(center, velocity.scale(delta));
-		this.center = ZMath.clamp(center, new Point2D(0, getHeight()/2), new Point2D(800,800));
+		this.center = ZMath.clamp(center, new Point2D(0, getHeight()/2), new Point2D(800,800-getHeight()/2));
 
 	}
 	public void moveTo(Point2D newCenter) {
@@ -92,8 +92,6 @@ public class Bread implements Moveable, Collidable, Holdable, GameObject{
 
 	@Override
 	public void update(double delta) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

@@ -23,9 +23,9 @@ public class Oven implements GameObject, Collidable{
 	private static final double COOKING_TIME = 2;
 	private InputSlot<Bread> breadSlot;
 	
-	public Oven(double xPosition, InputSlot<Bread> breadSlot) {
+	public Oven(Point2D blCorner, InputSlot<Bread> breadSlot) {
 		size = 100;
-		this.center = new Point2D(xPosition, size / 2);
+		this.center = new Point2D(blCorner.x + size/2, blCorner.y -  size / 2);
 		contents = null;
 		this.breadSlot = breadSlot;
 	}
@@ -52,7 +52,7 @@ public class Oven implements GameObject, Collidable{
 		else {
 			gc.setFill(Color.ORANGE);
 		}
-		gc.fillRect(center.x - size/4, center.y - size/4, size/2, size/4);
+		gc.fillRect(center.x - size/4, center.y, size/2, size/4);
 	}
 
 	@Override

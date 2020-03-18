@@ -21,10 +21,10 @@ import com.zalinius.utilities.time.GameClock;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Affine;
 import javafx.stage.Stage;
 
 public class Game extends GameContainer implements Logical, Graphical {
-
 
 
 	public static void main(String[] args) {
@@ -37,11 +37,23 @@ public class Game extends GameContainer implements Logical, Graphical {
 	private Oven oven;
 	private Player player;
 	private int breadDelivered;
+	
+	private PointView screen;
 
+	public Game() {
+		screen = new PointView() {			
+			@Override
+			public double y() {return 800;}
+			@Override
+			public double x() {return 800;}			
+			@Override
+			public Point2D point() {return new Point2D(x(), y());}
+		};
+		Dough.box = screen;
+	}
 	
 	@Override
 	public List<Plugin> getPlugins() {
-		System.out.println("RAWR");
 		List<Plugin> plugins = new ArrayList<>();
 		plugins.add(new FPSDisplay());
 		
@@ -71,7 +83,7 @@ public class Game extends GameContainer implements Logical, Graphical {
 				return true;
 			}
 		};
-		oven = new Oven(150, breadSlot);
+		oven = new Oven(new Point2D(150, screen.y()), breadSlot);
 
 	}
 
@@ -166,7 +178,7 @@ public class Game extends GameContainer implements Logical, Graphical {
 
 	@Override
 	public Point2D windowSize() {
-		return new Point2D(800, 800);
+		return screen.point();
 	}
 
 	@Override
@@ -194,8 +206,8 @@ public class Game extends GameContainer implements Logical, Graphical {
 		player.render(gc);
 
 
-		gc.setFill(Color.BLACK);
-		gc.strokeRect(0, 0, 800, 799);
+		gc.setStroke(Color.BLACK);
+		gc.strokeLine(0, 0, 800, 0);
 	}
 
 
@@ -269,6 +281,7 @@ public class Game extends GameContainer implements Logical, Graphical {
 			Bread bread = iterator.next();
 			bread.accelerate(Gravity.fall(delta*10, bread));
 			bread.move(delta);
+			bread.update(delta);
 		}
 
 		oven.update(delta);
@@ -276,9 +289,15 @@ public class Game extends GameContainer implements Logical, Graphical {
 		player.update(delta);
 
 		if(GameClock.isTimerDone(this)) {
-			doughs.add( new Dough(new Point2D(400, 750)));
+			doughs.add( new Dough(new Point2D(400, 50)));
 			GameClock.addTimer(this, 1);
 		}
+	}
+	
+	private Affine revertTransformY() {
+		Affine inverted = new Affine(1,0,0,0,1,0);
+		
+		return inverted;
 	}
 
 

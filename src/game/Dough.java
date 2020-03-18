@@ -24,6 +24,8 @@ public class Dough implements Collidable, Holdable, GameObject{
 	private Point2D center;
 	private Vector2D velocity;
 	
+	public static PointView box;
+	
 	private Paint color;
 
 	public Dough(Point2D center) {
@@ -54,14 +56,14 @@ public class Dough implements Collidable, Holdable, GameObject{
 		boolean onFloor = false;
 		for (Iterator<Dough> doughIt = doughs.iterator(); doughIt.hasNext();) {
 			Dough dough = doughIt.next();
-			if(dough.center.y == 0.0) {
+			if(dough.onFloor()) {
 				onFloor = true;
 			}
 			center = new Point2D( (center.x * mass + dough.center.x  * dough.mass)/(mass + dough.mass) , (center.y * mass + dough.center.y * dough.mass)/(mass + dough.mass) );
 			mass += dough.mass;
 		}
 		if(onFloor) {
-			center = new Point2D(center.x, 0.0);
+			center = new Point2D(center.x, box.y());
 		}
 		color = Color.BISQUE;
 		
@@ -124,7 +126,7 @@ public class Dough implements Collidable, Holdable, GameObject{
 	}
 	
 	public boolean onFloor() {
-		return center.y == 0.0;
+		return center.y == box.y();
 	}
 	
 	public void render(GraphicsContext gc) {
@@ -139,7 +141,7 @@ public class Dough implements Collidable, Holdable, GameObject{
 	public void renderSphere(GraphicsContext gc) {
 		gc.setFill(color);
 		double diameter = getDiameter();
-		gc.fillOval(center.x - diameter / 2, center.y , diameter, diameter);
+		gc.fillOval(center.x - diameter / 2, center.y - diameter/2 , diameter, diameter);
 	}
 
 	
@@ -154,7 +156,7 @@ public class Dough implements Collidable, Holdable, GameObject{
 	public void renderFloor(GraphicsContext gc) {
 		double semiCircleDiameter = getHalfCircleDiameter();
 		gc.setFill(color);
-		gc.fillArc(center.x - semiCircleDiameter/2, center.y - semiCircleDiameter / 2, semiCircleDiameter, semiCircleDiameter, 180, 180, ArcType.OPEN);		
+		gc.fillArc(center.x - semiCircleDiameter/2, center.y - semiCircleDiameter / 2, semiCircleDiameter, semiCircleDiameter, 0, 180, ArcType.OPEN);		
 	}
 
 	@Override

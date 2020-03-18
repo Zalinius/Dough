@@ -13,13 +13,16 @@ import javafx.scene.paint.Color;
 
 public class Player implements GameObject{
 
-	private double x;
+	private double x,y,w,h;
 	private double s;
 
 	private Holdable heldDough;
 
 	public Player() {
-		x = 100;
+		w = 20;
+		h = 40;
+		x = 100 - w / 2;
+		y = 800 - h /2;
 		s = 100;
 
 		heldDough = new Dough(new Point2D());
@@ -31,7 +34,7 @@ public class Player implements GameObject{
 	@Override
 	public void render(GraphicsContext gc) {
 		gc.setFill(Color.BLACK);
-		gc.fillRect(x - 10, 0, 20, 40);
+		gc.fillRect(x - w / 2, y - h/2, w, h);
 
 		if(heldDough != null) {
 			heldDough.render(gc);
@@ -42,7 +45,7 @@ public class Player implements GameObject{
 	@Override
 	public void update(double delta) {
 		if(heldDough != null) {
-			heldDough.moveTo(new Point2D(x, 15));
+			heldDough.moveTo(new Point2D(x, 800-15));
 		}
 	}
 
@@ -117,7 +120,7 @@ public class Player implements GameObject{
 	}
 	
 	public Point2D center() {
-		return new Point2D(x - 10, 5);
+		return new Point2D(x - w/2, y+(h/4));
 	}
 
 }
