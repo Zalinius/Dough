@@ -31,6 +31,8 @@ public class Game extends GameContainer implements Logical, Graphical {
 		System.out.println("Dough time!");
 		launch(args);
 	}
+	
+	private static final double breadPeriod = 3;
 
 	private Collection<Dough> doughs;
 	private Collection<Bread> breads;
@@ -220,6 +222,7 @@ public class Game extends GameContainer implements Logical, Graphical {
 			Dough dough = iterator.next();
 			dough.accelerate(Gravity.fall(delta*10, dough));
 			dough.move(delta);
+			dough.update(delta);
 
 			for(Iterator<Dough> doughIt2 = doughs.iterator(); doughIt2.hasNext();) {
 				Dough other = doughIt2.next();
@@ -290,7 +293,7 @@ public class Game extends GameContainer implements Logical, Graphical {
 
 		if(GameClock.isTimerDone(this)) {
 			doughs.add( new Dough(new Point2D(400, 50)));
-			GameClock.addTimer(this, 1);
+			GameClock.addTimer(this, breadPeriod);
 		}
 	}
 	

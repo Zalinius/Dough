@@ -26,7 +26,11 @@ public class Dough implements Collidable, Holdable, GameObject{
 	
 	public static PointView box;
 	
+	//Rendering
 	private Paint color;
+	private double renderedMass, originalMass;
+	private double age;
+	private boolean originallyGrowing;
 
 	public Dough(Point2D center) {
 		this(center, 1.0);
@@ -34,6 +38,10 @@ public class Dough implements Collidable, Holdable, GameObject{
 
 	public Dough(Point2D center, double mass) {
 		this.mass = mass;
+		this.originalMass = this.mass;
+		this.renderedMass = this.mass;
+		this.age = 0.0;
+		this.originallyGrowing = true;
 		color = Color.BISQUE;
 		
 		this.center = center;
@@ -42,6 +50,10 @@ public class Dough implements Collidable, Holdable, GameObject{
 	
 	public Dough(Dough d1, Dough d2) {
 		mass = d1.mass + d2.mass;
+		this.originalMass = Math.max(d1.mass, d2.mass);
+		this.renderedMass = Math.max(d1.mass, d2.mass);
+		this.age = 0;
+		this.originallyGrowing = true;
 		color = Color.BISQUE;
 		
 		center = new Point2D( (d1.center.x + d2.center.x)/2.0 , (d1.center.y + d2.center.y)/2.0 );
@@ -54,6 +66,7 @@ public class Dough implements Collidable, Holdable, GameObject{
 		mass = 0;
 		
 		boolean onFloor = false;
+		double biggestDough = 0;
 		for (Iterator<Dough> doughIt = doughs.iterator(); doughIt.hasNext();) {
 			Dough dough = doughIt.next();
 			if(dough.onFloor()) {
@@ -61,6 +74,9 @@ public class Dough implements Collidable, Holdable, GameObject{
 			}
 			center = new Point2D( (center.x * mass + dough.center.x  * dough.mass)/(mass + dough.mass) , (center.y * mass + dough.center.y * dough.mass)/(mass + dough.mass) );
 			mass += dough.mass;
+			if(dough.mass > biggestDough) {
+				biggestDough = dough.mass;
+			}
 		}
 		if(onFloor) {
 			center = new Point2D(center.x, box.y());
@@ -68,7 +84,10 @@ public class Dough implements Collidable, Holdable, GameObject{
 		color = Color.BISQUE;
 		
 		velocity = new Vector2D();
-		
+		renderedMass = biggestDough;
+		this.age = 0;
+		this.originalMass = renderedMass;
+		this.originallyGrowing = true;
 	}
 	
 	public boolean canSplit(double amount) {
@@ -82,10 +101,10 @@ public class Dough implements Collidable, Holdable, GameObject{
 
 	
 	private double getDiameter() {
-		return Math.sqrt(4 * mass / DENSITY / Math.PI);
+		return Math.sqrt(4 * renderedMass / DENSITY / Math.PI);
 	}
 	private double getHalfCircleDiameter() {
-		return Math.sqrt(8 * mass / DENSITY / Math.PI);
+		return Math.sqrt(8 * renderedMass / DENSITY / Math.PI);
 	}
 	
 	@Override
@@ -161,7 +180,13 @@ public class Dough implements Collidable, Holdable, GameObject{
 
 	@Override
 	public void update(double delta) {
-		// TODO Auto-generated method stub
+
+		age += delta;
+		double sinSign = originallyGrowing ? -1.0 : 1.0;
+		double period = .5;
+		
+		double sinArg = age * 2*Math.PI/ period;
+		renderedMass = sinSign * (Math.abs(originalMass - mass) * Math.sin(sinArg) / sinArg) + mass;
 		
 	}
 
